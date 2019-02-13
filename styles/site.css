@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+h1,h2,h3,div,nav,body,title,html,nav,article,header { /* CSS reset removes inconsistencies that occur across browsers */
+    margin: 0px;
+    padding: 0px;
+}
