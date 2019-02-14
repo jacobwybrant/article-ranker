@@ -6,12 +6,16 @@ $(document).ready(function(){
   $("#nextArticle").click(function() {
     if(currentArticle < 6) {
       articleCall(currentArticle++);
+  } else {
+      alert("No more articles found.");
   }
   });
 
   $("#previousArticle").click(function() {
     if(currentArticle > 0) {
       articleCall(currentArticle--);
+    } else {
+      alert("No previous article.");
     }
   });
 
@@ -21,7 +25,7 @@ $(document).ready(function(){
       var html = "";
 
       $("#articleTitle").text(articleJson["title"]);
-      
+
       $.each(articleJson.body, function(key, value){
         html += generateHtml(value["type"], value["model"]);
       });

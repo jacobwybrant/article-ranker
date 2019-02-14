@@ -4,10 +4,13 @@ h1,h2,h3,div,nav,body,title,html,nav,article,header { /* CSS reset removes incon
     margin: 0px;
     padding: 0px;
 }
-#container {
+#ArticleContainer {
   width: 60%;
   float: left;
-  position: absolute;
+  position: relative;
+}
+#menuContainer {
+
 }
 .link { /* postioning of bottom article buttons */
   margin: 5px;
