@@ -1,23 +1,32 @@
 $(document).ready(function(){
+  var currentArticle = 1;
 
-  articleCall(1);
+  articleCall(currentArticle); // loads first article
+
+  $("#nextArticle").click(function() {
+    if(currentArticle < 6) {
+      articleCall(currentArticle++);
+  }
+  });
+
+  $("#previousArticle").click(function() {
+    if(currentArticle > 0) {
+      articleCall(currentArticle--);
+    }
+  });
 
   function articleCall(articleNumber){
     $.get("https://raw.githubusercontent.com/bbc/news-coding-test-dataset/master/data/article-" + articleNumber.toString() + ".json", function(data, status) {
       var articleJson = JSON.parse(data)
-      console.log(articleJson);
-      $("#articleTitle").text(articleJson["title"]);
-      console.log(articleJson.body);
-
       var html = "";
 
+      $("#articleTitle").text(articleJson["title"]);
+      
       $.each(articleJson.body, function(key, value){
-        console.log(value["type"]);
         html += generateHtml(value["type"], value["model"]);
       });
 
       $("#articleBody").html(html);
-
     });
   }
 
@@ -35,7 +44,7 @@ $(document).ready(function(){
       case "image":
         return "<img src=\"" + attr["url"] + "\" alt=\"" + attr["altText"] + "\" height=\"" + attr["height"] + "\" width=\"" + attr["width"] +"\"></img>";
       default:
-
+        return "<p>Invaild json</p>";
     }
   }
 
