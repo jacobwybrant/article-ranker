@@ -4,13 +4,23 @@ h1,h2,h3,div,nav,body,title,html,nav,article,header { /* CSS reset removes incon
     margin: 0px;
     padding: 0px;
 }
+#rankList {
+  list-style-type: none;
+  width: 40%;
+}
+#rankList li {
+  margin: 0 3px 3px 3px;
+  padding: 0.4em;
+  height: 15px;
+  text-align: center;
+}
+#rankArticles h2 {
+  text-align: center
+}
 #ArticleContainer {
   width: 60%;
   float: left;
   position: relative;
-}
-#menuContainer {
-
 }
 .link { /* postioning of bottom article buttons */
   margin: 5px;
