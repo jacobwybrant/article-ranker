@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
 h1,h2,h3,div,nav,body,title,html,nav,article,header { /* CSS reset removes inconsistencies that occur across browsers */
-    margin: 0px;
-    padding: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 #rankList {
   list-style-type: none;
@@ -14,7 +14,7 @@ h1,h2,h3,div,nav,body,title,html,nav,article,header { /* CSS reset removes incon
   height: 15px;
   text-align: center;
 }
-#rankArticles h2 {
+#menuContainer h2 {
   text-align: center
 }
 #ArticleContainer {

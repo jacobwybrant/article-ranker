@@ -2,42 +2,32 @@ $(document).ready(function() {
   let currentArticle = 1;
   let maxArticles = 5; // Could be got via request
   let articlesJson = new Array(maxArticles);
+  let articlesVisted = new Array(maxArticles).fill(false);
   let lastArticle = false;
-
 
   articleCall(currentArticle); // loads first article
 
   $("#nextArticle").click(function() {
 
-    console.log(currentArticle);
-
-    if(currentArticle < 5) {
+    if(currentArticle < maxArticles) {
       articleCall(++currentArticle);
 
-      if(currentArticle == 5) {
+      if(currentArticle == maxArticles) {
         lastArticle = true;
         rankArticles();
       }
     } else {
       alert("No more articles found.");
     }
-
-    console.log(currentArticle);
-
   });
 
   $("#previousArticle").click(function() {
 
-    console.log(currentArticle);
-
-    if(currentArticle > 0) {
+    if(currentArticle > 1) {
       articleCall(--currentArticle);
     } else {
       alert("No previous article.");
     }
-
-    console.log(currentArticle);
-
   });
 
   function rankArticles()
@@ -50,7 +40,7 @@ $(document).ready(function() {
 
     html += "</ul> <button type=\"button\" id=\"submitArticles\">Submit Ranking</button>";
 
-    $("#rankArticles").html(html);
+    $("#rankArticles").hide().html(html).fadeIn('slow');
 
     $("#rankList").sortable();
     $("#rankList").disableSelection();
@@ -61,48 +51,47 @@ $(document).ready(function() {
         order.push($(this).attr('id').toString());
       });
 
-      $.post("/url", { "articleRanking" : order } , function(data, status) {
-        $("#rankArticles").html("<p>Thank you for submiting your ranking.</p>");
-      }).fail(function() {
-        alert("Ranking could not be submitted (Currently no server)");
+      fakePost("/handleRanking.php", { "articleRanking" : order } , function(data, status) {
+        if(status == "success") {
+          $("#rankArticles").hide().html("<p>Thank you for submiting your ranking.</p>").fadeIn('slow');
+        } else {
+          alert("Ranking was not submitted, please try again.");
+        }
       });
     });
   }
 
-  /*function createList(articleNumber)
+  function createList(articleNumber)
   {
-    console.log("In create list");
     if(articlesVisted[articleNumber - 1] == false) {
-      $("#articleList").append("<ul id=\"article" + currentArticle.toString() + "\"> Article " + currentArticle.toString()+ "</ul>");
+      $("#articleList").append($("<li id=\"article" + currentArticle.toString() + "\"> Article " + currentArticle.toString()+ "</li>").hide().fadeIn("slow"));
 
   	  $("#article" + currentArticle.toString() + "").click(function() {
-  		    articleCall(currentArticle);
+          let number = articleNumber;
+          articleCall(number);
   	  });
     }
-  }*/
+  }
 
   function articleCall(articleNumber){
 
     if(articlesJson[articleNumber - 1] == null) {
-      $.ajax( {
-        async: true,
-        url: "https://raw.githubusercontent.com/bbc/news-coding-test-dataset/master/data/article-" + articleNumber.toString() + ".json",
-        success: function(data, status) {
-        articlesJson[articleNumber - 1] = JSON.parse(data);
-        loadArticle(articlesJson[articleNumber - 1]);
-      }
+      $.get("https://raw.githubusercontent.com/bbc/news-coding-test-dataset/master/data/article-" + articleNumber.toString() + ".json",
+        function(data, status) {
+          articlesJson[articleNumber - 1] = JSON.parse(data); // cache json
+          if(articleNumber == currentArticle && (articleNumber + 1) < maxArticles) {  // only want to load the html if this is the current article not pre-loading the next article
+            loadArticle(articlesJson[articleNumber - 1]);
+            articleCall(articleNumber + 1); // load next article after the current one has loaded
+        }
     });
   } else {
       loadArticle(articlesJson[articleNumber - 1]);
   }
 
-
-
-
-      /*createList(articleNumber);
-      articlesVisted[currentArticle - 1] = true;
-      console.log(articlesVisted);*/
-
+  if(articleNumber == currentArticle) {
+    createList(articleNumber);
+    articlesVisted[currentArticle - 1] = true;
+    }
   }
 
   function loadArticle(articleJson)
@@ -114,11 +103,10 @@ $(document).ready(function() {
       html += generateHtml(value["type"], value["model"]);
     });
 
-    $("#articleBody").html(html);
+    $("#articleBody").hide().html(html).fadeIn('slow');
   }
 
-  function generateHtml(type, attr)
-  {
+  function generateHtml(type, attr) {
     switch (type) {
       case "paragraph":
         return "<p>" + attr["text"]+ "</p>";
@@ -145,3 +133,16 @@ $(document).ready(function() {
     return html;
   }
 });
+
+async function fakePost(url, data, completion) {
+  await wait1Second(); // simulates the time to post request
+  completion({ success : true }, "success"); // simulates a succesful $.post method
+}
+
+function wait1Second() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+}
