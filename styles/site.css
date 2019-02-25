@@ -4,6 +4,11 @@ h1,h2,h3,div,nav,body,title,html,nav,article,header { /* CSS reset removes incon
   margin: 0px;
   padding: 0px;
 }
+br { /* format space for breaks */
+  display: block;
+  content: "";
+  margin-top: 0;
+}
 #rankList {
   list-style-type: none;
   width: 40%;
@@ -19,6 +24,7 @@ h1,h2,h3,div,nav,body,title,html,nav,article,header { /* CSS reset removes incon
 }
 #ArticleContainer {
   width: 60%;
+  height: 150%;
   float: left;
   position: relative;
 }

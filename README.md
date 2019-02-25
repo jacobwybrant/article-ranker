@@ -1,1 +1,3 @@
 # article-ranker
+This site requests articles in JSON and displays them in html, the user can then read through them and on the last article is given the option to rate them. Ideally the ranking would be sent via a POST request to the server, but this project does not contain any server logic, so a POST request is simulated with a asynchronous function.  
+This project makes use of JQuery and JQuery UI along with HTML and CSS.  I haven't spent much time on styling the page, instead deciding to focus on the functionality, such as caching the JSON, loading the next article after displaying the current one and letting users navigate through already visited articles. 
